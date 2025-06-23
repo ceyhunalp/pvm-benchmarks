@@ -1,0 +1,1 @@
+[{"inputs":[{"internalType":"bytes","name":"data","type":"bytes"}],"name":"run","outputs":[{"internalType":"bytes8","name":"ret","type":"bytes8"}],"stateMutability":"pure","type":"function"}]

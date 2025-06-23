@@ -1,0 +1,22 @@
+[workspace]
+resolver = "2"
+members = [
+    "benchmarks/riscv-inception/guest-program",
+    "benchmarks/riscv-inception/rust",
+    "benchmarks/sha1/rust",
+    "pvm-host",
+]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+lto = "fat"
+opt-level = 3
+codegen-units = 1
+debug = false
+panic = "abort"
+
+[profile.release-small]
+inherits = "release"
+opt-level = "s"

@@ -1,0 +1,11 @@
+[package]
+name = "guest-program"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "guest-program"
+
+[dependencies]
+nes = { git = "https://github.com/koute/pinky.git", rev = "5a9d4ff5f22731191cffd7d6202a1d144aacd740", default-features = false }
+picoalloc = { version = "5.1.0", default-features = false }

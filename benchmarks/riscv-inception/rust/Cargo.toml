@@ -1,0 +1,8 @@
+[package]
+name = "riscv-inception"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+picoalloc = { version = "5.0.0", default-features = false, features = ["global_allocator_rust"] }
+polkavm-derive = "0.25.0"
