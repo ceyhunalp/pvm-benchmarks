@@ -335,11 +335,17 @@ impl State {
 
 #[cfg(not(target_env = "polkavm"))]
 fn main() {
-    let time = std::time::Instant::now();
     let calldata = include_bytes!("../../../../blobs/guest-program.bin");
     let count = run(calldata.as_ptr().addr(), calldata.len());
-    println!("INFO: Finished in {count} (0x{count:x}) steps!");
-    println!("INFO: Elapsed: {}s", time.elapsed().as_secs_f64());
+
+    let time = std::time::Instant::now();
+    for _ in 0..10 {
+        run(calldata.as_ptr().addr(), calldata.len());
+    }
+    let elapsed = time.elapsed().as_secs_f64() / 10.0;
+
+    println!("[INFO] Finished in {count} (0x{count:x}) steps!");
+    println!("[INFO] Average time: {elapsed}s",);
 }
 
 #[cfg_attr(target_env = "polkavm", polkavm_derive::polkavm_export)]
@@ -347,16 +353,14 @@ fn run(calldata: usize, length: usize) -> u64 {
     let mut data = unsafe { core::slice::from_raw_parts(calldata as *const u8, length) }.to_vec();
 
     #[cfg(not(target_env = "polkavm"))]
-    println!("INFO: Blob size: 0x{:x} ({})", data.len(), data.len());
-
+    // println!("INFO: Blob size: 0x{:x} ({})", data.len(), data.len());
     let bss_size = {
         let xs = &data[data.len() - 4..];
         u32::from_le_bytes([xs[0], xs[1], xs[2], xs[3]]).min(16 * 1024 * 1024)
     };
 
     #[cfg(not(target_env = "polkavm"))]
-    println!("INFO: BSS size: 0x{:x}", bss_size);
-
+    // println!("INFO: BSS size: 0x{:x}", bss_size);
     let mut length = data.len() - 4;
     data.truncate(length);
     length += bss_size as usize;

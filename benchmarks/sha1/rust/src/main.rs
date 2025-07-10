@@ -15,7 +15,12 @@ fn main() {
     let time = std::time::Instant::now();
     let calldata = include_bytes!("../../../../blobs/guest-program.bin");
     run(calldata.as_ptr().addr(), calldata.len());
-    println!("INFO: Elapsed: {}s", time.elapsed().as_secs_f64());
+    for _ in 0..10 {
+        run(calldata.as_ptr().addr(), calldata.len());
+    }
+    let elapsed = time.elapsed().as_secs_f64() / 10.0;
+
+    println!("[INFO] Average time: {elapsed}s",);
 }
 
 #[cfg_attr(target_env = "polkavm", polkavm_derive::polkavm_export)]
@@ -27,18 +32,16 @@ fn run(calldata: usize, length: usize) -> u64 {
     let h = h.as_slice();
 
     #[cfg(not(target_env = "polkavm"))]
-    print!("INFO: Hash: ");
+    // print!("INFO: Hash: ");
     #[cfg(not(target_env = "polkavm"))]
-    for b in h {
-        print!("{:02x}", b);
-    }
+    // for b in h {
+    //     print!("{:02x}", b);
+    // }
     #[cfg(not(target_env = "polkavm"))]
-    println!();
-
+    // println!();
     let h = u64::from_be_bytes([h[0], h[1], h[2], h[3], h[4], h[5], h[6], h[7]]);
 
     #[cfg(not(target_env = "polkavm"))]
-    println!("INFO: Calculated hash: 0x{:x}", h);
-
+    // println!("INFO: Calculated hash: 0x{:x}", h);
     h
 }
