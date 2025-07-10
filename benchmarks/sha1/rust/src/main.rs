@@ -13,7 +13,7 @@ use sha1::Digest;
 #[cfg(not(target_env = "polkavm"))]
 fn main() {
     let time = std::time::Instant::now();
-    let calldata = include_bytes!("../../../../blobs/guest-program.bin");
+    let calldata = include_bytes!("../../../../blobs/sha1.input");
     run(calldata.as_ptr().addr(), calldata.len());
     for _ in 0..10 {
         run(calldata.as_ptr().addr(), calldata.len());
