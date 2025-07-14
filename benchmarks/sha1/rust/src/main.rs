@@ -39,53 +39,28 @@ fn run(calldata: usize, length: usize) -> u64 {
 }
 
 fn run_native() -> () {
-    let calldata_1k = include_bytes!("../../../../blobs/sha1-1k.input");
-    run(calldata_1k.as_ptr().addr(), calldata_1k.len());
-
-    let mut time = std::time::Instant::now();
-    for _ in 0..10 {
-        run(calldata_1k.as_ptr().addr(), calldata_1k.len());
+    for (size, calldata) in [
+        ("1K", &include_bytes!("../../../../blobs/sha1-1k.input")[..]),
+        (
+            "10K",
+            &include_bytes!("../../../../blobs/sha1-10k.input")[..],
+        ),
+        (
+            "100K",
+            &include_bytes!("../../../../blobs/sha1-100k.input")[..],
+        ),
+        ("1M", &include_bytes!("../../../../blobs/sha1-1m.input")[..]),
+        (
+            "10M",
+            &include_bytes!("../../../../blobs/sha1-10m.input")[..],
+        ),
+    ] {
+        run(calldata.as_ptr().addr(), calldata.len());
+        let time = std::time::Instant::now();
+        for _ in 0..10 {
+            run(calldata.as_ptr().addr(), calldata.len());
+        }
+        let elapsed = time.elapsed().as_secs_f64() / 10.0;
+        println!("[{size}] Average time: {elapsed}s",);
     }
-    let mut elapsed = time.elapsed().as_secs_f64() / 10.0;
-    println!("[1K] Average time: {elapsed}s",);
-
-    let calldata_10k = include_bytes!("../../../../blobs/sha1-10k.input");
-    run(calldata_10k.as_ptr().addr(), calldata_10k.len());
-
-    time = std::time::Instant::now();
-    for _ in 0..10 {
-        run(calldata_10k.as_ptr().addr(), calldata_10k.len());
-    }
-    elapsed = time.elapsed().as_secs_f64() / 10.0;
-    println!("[10K] Average time: {elapsed}s",);
-
-    let calldata_100k = include_bytes!("../../../../blobs/sha1-100k.input");
-    run(calldata_100k.as_ptr().addr(), calldata_100k.len());
-
-    time = std::time::Instant::now();
-    for _ in 0..10 {
-        run(calldata_100k.as_ptr().addr(), calldata_100k.len());
-    }
-    elapsed = time.elapsed().as_secs_f64() / 10.0;
-    println!("[100K] Average time: {elapsed}s",);
-
-    let calldata_1m = include_bytes!("../../../../blobs/sha1-1m.input");
-    run(calldata_1m.as_ptr().addr(), calldata_1m.len());
-
-    time = std::time::Instant::now();
-    for _ in 0..10 {
-        run(calldata_1m.as_ptr().addr(), calldata_1m.len());
-    }
-    elapsed = time.elapsed().as_secs_f64() / 10.0;
-    println!("[1M] Average time: {elapsed}s",);
-
-    let calldata_10m = include_bytes!("../../../../blobs/sha1-10m.input");
-    run(calldata_10m.as_ptr().addr(), calldata_10m.len());
-
-    time = std::time::Instant::now();
-    for _ in 0..10 {
-        run(calldata_10m.as_ptr().addr(), calldata_10m.len());
-    }
-    elapsed = time.elapsed().as_secs_f64() / 10.0;
-    println!("[10M] Average time: {elapsed}s",);
 }
