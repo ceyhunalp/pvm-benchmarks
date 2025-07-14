@@ -22,22 +22,12 @@ fn run(calldata: usize, length: usize) -> u64 {
     hasher.update(&calldata);
     let h = hasher.finalize();
     let h = h.as_slice();
-
-    #[cfg(not(target_env = "polkavm"))]
-    // print!("INFO: Hash: ");
-    #[cfg(not(target_env = "polkavm"))]
-    // for b in h {
-    //     print!("{:02x}", b);
-    // }
-    #[cfg(not(target_env = "polkavm"))]
-    // println!();
     let h = u64::from_be_bytes([h[0], h[1], h[2], h[3], h[4], h[5], h[6], h[7]]);
 
-    #[cfg(not(target_env = "polkavm"))]
-    // println!("INFO: Calculated hash: 0x{:x}", h);
     h
 }
 
+#[cfg(not(target_env = "polkavm"))]
 fn run_native() -> () {
     for (size, calldata) in [
         ("1K", &include_bytes!("../../../../blobs/sha1-1k.input")[..]),
