@@ -1,0 +1,20 @@
+--- main.rs	2025-07-14 16:06:23
++++ main_upd.rs	2025-07-14 16:07:32
+@@ -350,6 +350,7 @@
+ 
+ #[cfg_attr(target_env = "polkavm", polkavm_derive::polkavm_export)]
+ fn run(calldata: usize, length: usize) -> u64 {
++    let MAX_COUNT = 1000;
+     let mut data = unsafe { core::slice::from_raw_parts(calldata as *const u8, length) }.to_vec();
+ 
+     #[cfg(not(target_env = "polkavm"))]
+@@ -380,6 +381,9 @@
+             Status::Continue => {}
+             Status::Error => panic!(),
+             Status::Finished => break,
++        }
++        if count >= MAX_COUNT {
++            break;
+         }
+     }
+ 
