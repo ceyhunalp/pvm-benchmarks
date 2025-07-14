@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+mkdir -p logs
+
 home=$(pwd)
 
 echo "Running benchmark (Native): SHA1"
