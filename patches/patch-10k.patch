@@ -4,7 +4,7 @@
  
  #[cfg_attr(target_env = "polkavm", polkavm_derive::polkavm_export)]
  fn run(calldata: usize, length: usize) -> u64 {
-+    let max_count = 1000;
++    let max_count = 10000;
      let mut data = unsafe { core::slice::from_raw_parts(calldata as *const u8, length) }.to_vec();
  
      let bss_size = {
